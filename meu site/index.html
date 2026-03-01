@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Amor da minha vida</title>
+<style>
+  body {
+    background-color: #ff0000; /* vermelho intenso */
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #conteudo {
+    width: 90%;
+    max-width: 700px;
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    max-height: 60vh;
+    border-radius: 15px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transition: opacity 1s ease;
+  }
+
+  .texto {
+    font-size: 22px;
+    margin-top: 20px;
+    line-height: 1.5;
+    min-height: 120px;
+    text-align: center;
+  }
+
+  input {
+    font-size: 18px;
+    padding: 5px;
+    margin-top: 10px;
+  }
+
+  button {
+    padding: 12px 25px;
+    margin-top: 25px;
+    font-size: 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #fff;
+    color: #ff0000;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .coracao {
+    position: fixed;
+    z-index: 9999;
+    animation: cair 3s linear forwards;
+    user-select: none;
+  }
+
+  @keyframes cair {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="conteudo">
+  <h1>Oi, amor</h1>
+  <p>Antes de começar, me responda umas perguntinhas fofas:</p>
+  <input type="text" id="p1" placeholder="Você me ama?"><br>
+  <input type="text" id="p2" placeholder="Você sente minha falta?"><br>
+  <input type="text" id="p3" placeholder="Qual minha música favorita?"><br>
+  <input type="text" id="p4" placeholder="Qual meu cheiro você mais gosta?"><br>
+  <input type="text" id="p5" placeholder="Qual momento nosso você lembra sempre?"><br>
+  <input type="text" id="p6" placeholder="O que você mais gosta no meu jeito?"><br>
+  <input type="text" id="p7" placeholder="Você quer passar mais tempo comigo?"><br>
+  <button onclick="iniciar()">Enviar respostas e começar</button>
+</div>
+
+<audio id="musica" loop>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let etapa = 0;
+let respostas = [];
+
+const fotos = [
+  "foto1.webp",
+  "foto2.webp",
+  "foto3.webp",
+  "foto4.webp",
+  "foto5.webp",
+  "foto5.webp"
+];
+
+const textos = [
+  "Amor, quando penso no nosso primeiro beijo, lembro de como tudo parecia se encaixar naquele momento. Foi simples, mas perfeito, e desde então eu percebi o quanto você é importante para mim.",
+  "Amor, eu adoro observar os pequenos detalhes sobre você. A cruz de prata que você usa na escola, o jeito que combina com seu estilo sem esforço, me mostra como você é única e especial.",
+  "Amor, seus cachos, com aquelas mechas vermelhas, me chamam atenção todos os dias. É incrível como cada fio combina com você e reflete seu jeito autêntico e lindo.",
+  "Amor, seus olhos têm algo que me fascina profundamente. É difícil explicar, mas quando você olha para mim, sinto uma conexão que admiro e valorizo muito.",
+  "Amor, eu te admiro de tantas formas: pelo seu jeito de ser, pela força que demonstra, e por tudo o que você é. Eu te amo de um jeito que palavras não conseguem descrever completamente, mas quero que saiba que você é tudo para mim.",
+  "Amor, eu amo ficar perto de você, perto de você o mundo fica em silêncio. Eu amo seus beijos e seus abraços, o jeito que você me trata, o jeito que você fica alegre. Eu te amo."
+];
+
+function typeWriter(text, element, callback) {
+  let i = 0;
+  element.innerHTML = "";
+  function typing() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, 30);
+    } else if (callback) {
+      setTimeout(callback, 1000);
+    }
+  }
+  typing();
+}
+
+function proximaSlide() {
+  const conteudo = document.getElementById('conteudo');
+
+  if (etapa < fotos.length) {
+    conteudo.innerHTML = `
+      <img src="${fotos[etapa]}" alt="Foto ${etapa+1}" id="foto">
+      <div class="texto" id="texto"></div>
+    `;
+    const textoDiv = document.getElementById('texto');
+    typeWriter(textos[etapa], textoDiv, proximaSlide);
+    etapa++;
+  } else {
+    conteudo.innerHTML = `<h1>Eu te amo, amor. Sempre vou te admirar e cuidar de você.</h1>
+    <button onclick="cairCoracoes()">Aperte aqui e cairam corações</button>`;
+  }
+}
+
+function mostrarRespostas(callback) {
+  const conteudo = document.getElementById('conteudo');
+  conteudo.innerHTML = '<h2>Suas respostas:</h2><div class="texto" id="textoRespostas"></div>';
+  const textoDiv = document.getElementById('textoRespostas');
+  let i = 0;
+
+  function mostrar() {
+    if (i < respostas.length) {
+      textoDiv.innerHTML += respostas[i] + "<br>";
+      i++;
+      setTimeout(mostrar, 500);
+    } else if (callback) {
+      setTimeout(callback, 1000);
+    }
+  }
+  mostrar();
+}
+
+function iniciar() {
+  respostas = [];
+  for (let i = 1; i <= 7; i++) {
+    let pergunta = document.getElementById('p' + i).placeholder;
+    let resposta = document.getElementById('p' + i).value;
+    respostas.push(pergunta + " → " + resposta);
+  }
+
+  const musica = document.getElementById('musica');
+  musica.play();
+
+  mostrarRespostas(proximaSlide);
+}
+
+// Função para criar corações e "eu te amo" caindo
+function cairCoracoes() {
+  const cores = ["#ff0000","#ff69b4","#00ffff","#ffffff","#32cd32"];
+  for(let i=0;i<60;i++){
+    setTimeout(() => {
+      const coracao = document.createElement("div");
+      coracao.classList.add("coracao");
+      coracao.style.left = Math.random()*window.innerWidth + "px";
+      coracao.style.fontSize = (20+Math.random()*25)+"px";
+      
+      // 20% de chance de ser "Eu te amo"
+      if(Math.random()<0.2){
+        coracao.innerHTML = "Eu te amo 💖";
+        coracao.style.fontSize = (20+Math.random()*15)+"px";
+      } else {
+        coracao.innerHTML = "❤";
+      }
+
+      coracao.style.color = cores[Math.floor(Math.random()*cores.length)];
+      document.body.appendChild(coracao);
+
+      setTimeout(() => {
+        coracao.remove();
+      }, 3000);
+    }, i*150);
+  }
+}
+</script>
+
+</body>
+</html>
